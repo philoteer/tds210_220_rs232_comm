@@ -27,6 +27,10 @@ def get_time_scale(ser):
 	ser.write(b"HORIZONTAL:MAIN:SCALE?\n")
 	return float(ser.readline().decode('ascii'))
 
+def get_samp_rate(ser): #Untested
+	ser.write(b"WFMPre:XINcr?\n")
+	return float(ser.readline().decode('ascii'))
+
 def set_data_source(ser, ch):
 	command=f"DATA:SOURCE {ch}\n"
 	ser.write(bytes(command,'ascii'))
