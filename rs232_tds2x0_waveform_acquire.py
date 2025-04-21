@@ -83,7 +83,7 @@ set_data_end(ser,DATA_END)
 
 while(True):
 	volt_scale = get_volt_scale(ser, CH)
-	volt_scale = (volt_scale * 4) / 128
+	volt_scale = (volt_scale * 5.12) / 128
 
 	data = get_curve(ser)
 	print(parse_curve(data, volt_scale))
