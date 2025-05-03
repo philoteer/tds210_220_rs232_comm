@@ -5,6 +5,7 @@
 
 import serial
 import numpy as np
+import matplotlib.pyplot as plt
 
 ##### Consts
 PORT='/dev/ttyS0'
@@ -15,8 +16,9 @@ BYTESIZE=serial.EIGHTBITS
 CH="CH1"
 
 RECORD_LEN = 2500
-DATA_START = 512
-DATA_END = 1023
+DATA_START = 0
+DATA_END = 2500
+
 ####### Fcts
 def get_volt_scale(ser, CH):
 	command=f"{CH}:SCALE?\n"
@@ -85,9 +87,17 @@ set_record_len(ser,RECORD_LEN)
 set_data_start(ser, DATA_START)
 set_data_end(ser,DATA_END)
 
+print(get_time_scale(ser) * 1000)
 while(True):
 	volt_scale = get_volt_scale(ser, CH)
 	volt_scale = (volt_scale * 5.12) / 128
+	time_scale = get_time_scale(ser) * (1000*10) #s -> ms, 10 time steps total
 
 	data = get_curve(ser)
-	print(parse_curve(data, volt_scale))
+	curve = parse_curve(data, volt_scale)
+	
+	plt.plot(np.linspace(0, time_scale, RECORD_LEN),curve)
+	plt.xlabel("time (ms)")
+	plt.ylabel("volt (v)")
+	plt.title("Tek")
+	plt.show()
